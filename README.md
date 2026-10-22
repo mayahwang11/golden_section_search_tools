@@ -26,3 +26,10 @@ Returns `(x_min, f_min)` where `x_min` is the best minimizer found and `f_min` i
 - If `lower > upper` is passed, the bracket is normalized internally and the result is returned as if the bounds were given in ascending order; the minimizer's value is unaffected.
 - If the initial interval is narrower than `tol`, the routine evaluates `f` once at `lower` and returns immediately.
 - The returned `x_min` is one of the two final interior probe points (whichever has the smaller function value), not the midpoint of the final bracket. This is slightly more accurate when the minimum sits near an endpoint.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
